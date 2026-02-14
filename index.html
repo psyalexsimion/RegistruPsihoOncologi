@@ -436,7 +436,7 @@ footer a:hover {
 <body>
 
 <header>
-  <h1>Registru Psihologi Oncologi România</h1>
+  <h1>Registru Psiho-Oncologi România</h1>
   <div class="subtitle">Platformă centralizată pentru găsirea specialiștilor în psiho-oncologie</div>
 </header>
 
@@ -527,8 +527,8 @@ footer a:hover {
 
 <div class="field">
 <label class="required">Spital</label>
-<input id="spital" placeholder="Ex: Spitalul Universitar de Urgență București">
-<div class="tooltip">Numele spitalului (dacă aplică) sau lăsați gol pentru cabinet privat.</div>
+<input id="spital" placeholder="Ex: Spitalul Universitar de Urgență București" value="-">
+<div class="tooltip">Numele spitalului (dacă se aplică) sau lăsați "-" pentru cabinet privat.</div>
 </div>
 
 <div class="field">
@@ -559,8 +559,11 @@ footer a:hover {
 </div>
 
 <div class="field">
-<label class="required">Contact</label>
+<label class="required">Contactul din RUP (acesta va fi verificat)</label>
 <input id="contactInfo" placeholder="Telefon / Email">
+<div class="tooltip">Important! Trimiteti email/mesaj pe WhatsApp (folosind pagina Contact) de pe contactul din RUP pentru validare si consimtamant</div>
+<div class="tooltip" style="color:#ff0000"><b>In caz contrar, profilul se considera invalid si va fi <u>sters</u></div></b>
+
 </div>
 </div>
 
@@ -711,7 +714,7 @@ footer a:hover {
 
 <h3>Cum funcționează?</h3>
 
-<p>Platforma este deschisă și colaborativă. Psihologii oncologi pot adăuga propriul profil completând un formular simplu cu informații verificabile (cod RUP obligatoriu pentru autenticitate).</p>
+<p>Platforma este deschisă și colaborativă. Psihologii oncologi pot adăuga propriul profil completând un formular simplu cu informații verificabile (cod RUP obligatoriu pentru introducere unica).</p>
 
 <p>Pacienții și aparținătorii pot căuta și filtra psihologi în funcție de nevoile lor specifice, pot sorta rezultatele și pot contacta direct specialiștii.</p>
 
@@ -756,6 +759,7 @@ Subiect <span style="color: red;">*</span>
 <select id="contactSubiect" 
         style="width: 100%; padding: 12px; border: 2px solid #e0e6ed; border-radius: 8px; font-size: 15px;">
 <option value="">Selectează un subiect</option>
+<option value="Introducere Psiholog">Introducere Psiholog</option>
 <option value="Problemă tehnică">Problemă tehnică</option>
 <option value="Sugestie de îmbunătățire">Sugestie de îmbunătățire</option>
 <option value="Întrebare generală">Întrebare generală</option>
@@ -768,7 +772,7 @@ Subiect <span style="color: red;">*</span>
 <label style="display: block; font-weight: 600; margin-bottom: 8px; font-size: 14px;">
 Mesajul tău <span style="color: red;">*</span>
 </label>
-<textarea id="contactMesaj" placeholder="Scrie aici mesajul tău..."
+<textarea id="contactMesaj" placeholder="Scrie aici mesajul tău...(exemplu: Am adaugat profilul meu pe site)"
           style="width: 100%; padding: 12px; border: 2px solid #e0e6ed; border-radius: 8px; font-size: 15px; min-height: 150px; font-family: inherit; resize: vertical;"></textarea>
 </div>
 
@@ -1184,7 +1188,7 @@ function trimiteWhatsApp() {
   }
   
   // Create WhatsApp message
-  var whatsappText = 'Salut! Am o intrebare despre Registrul Psihologi Oncologi.\n\n';
+  var whatsappText = 'Salut! Legat de Registrul Psiho-Oncologi.\n\n';
   whatsappText += 'Nume: ' + nume + '\n';
   whatsappText += 'Subiect: ' + subiect + '\n\n';
   whatsappText += 'Mesaj:\n' + mesaj;
