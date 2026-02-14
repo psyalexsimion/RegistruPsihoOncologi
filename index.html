@@ -1,0 +1,1271 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Registru Psihologi Oncologi România</title>
+
+<!-- Supabase JS Client -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Lora:wght@400;500;600&display=swap');
+
+:root {
+  --primary: #1a5f5f;
+  --primary-light: #2c7a7b;
+  --accent: #d4a574;
+  --bg: #fafafa;
+  --card: #ffffff;
+  --text: #1f2933;
+  --text-light: #52606d;
+  --border: #e0e6ed;
+  --hover: #f4f7f8;
+  --shadow: rgba(0,0,0,0.08);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Lora', serif;
+  background: linear-gradient(135deg, #fafafa 0%, #f0f4f5 100%);
+  color: var(--text);
+  min-height: 100vh;
+  line-height: 1.6;
+}
+
+header {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+  color: white;
+  padding: 40px 20px;
+  text-align: center;
+  box-shadow: 0 4px 20px var(--shadow);
+  position: relative;
+  overflow: hidden;
+}
+
+header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0l30 30-30 30L0 30z' fill='%23ffffff' fill-opacity='0.05'/%3E%3C/svg%3E");
+  opacity: 0.3;
+}
+
+h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(24px, 5vw, 36px);
+  font-weight: 700;
+  margin: 0;
+  position: relative;
+  z-index: 1;
+  letter-spacing: -0.5px;
+}
+
+.subtitle {
+  font-size: 14px;
+  margin-top: 8px;
+  opacity: 0.9;
+  position: relative;
+  z-index: 1;
+}
+
+nav {
+  background: white;
+  box-shadow: 0 2px 8px var(--shadow);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.nav-container {
+  max-width: 1400px;
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 20px;
+  flex-wrap: wrap;
+}
+
+.nav-btn {
+  padding: 10px 24px;
+  border: none;
+  background: transparent;
+  color: var(--text);
+  font-family: 'Lora', serif;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.nav-btn:hover {
+  background: var(--hover);
+  color: var(--primary);
+}
+
+.nav-btn.active {
+  background: var(--primary);
+  color: white;
+}
+
+.container {
+  padding: 30px 20px;
+  max-width: 1400px;
+  margin: auto;
+}
+
+.page {
+  display: none;
+}
+
+.page.active {
+  display: block;
+  animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.card {
+  background: var(--card);
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px var(--shadow);
+  margin-bottom: 30px;
+  border: 1px solid var(--border);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px var(--shadow);
+}
+
+h2, h3 {
+  font-family: 'Playfair Display', serif;
+  color: var(--primary);
+  margin-bottom: 20px;
+  font-weight: 700;
+}
+
+h2 {
+  font-size: 28px;
+  border-bottom: 3px solid var(--accent);
+  padding-bottom: 10px;
+  display: inline-block;
+}
+
+h3 {
+  font-size: 22px;
+}
+
+label {
+  font-size: 14px;
+  font-weight: 600;
+  display: block;
+  margin-bottom: 6px;
+  color: var(--text);
+}
+
+label.required::after {
+  content: ' *';
+  color: #e53e3e;
+}
+
+input, select, textarea {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 10px;
+  border: 2px solid var(--border);
+  font-size: 15px;
+  font-family: 'Lora', serif;
+  transition: all 0.3s ease;
+  background: white;
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(44, 122, 123, 0.1);
+}
+
+input::placeholder, textarea::placeholder {
+  color: #a0aec0;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 150px;
+}
+
+.grid {
+  display: grid;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+@media(min-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media(min-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+}
+
+.tooltip {
+  font-size: 12px;
+  color: var(--text-light);
+  margin-top: 4px;
+  font-style: italic;
+}
+
+button {
+  padding: 14px 28px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+  color: white;
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Lora', serif;
+  box-shadow: 0 4px 12px rgba(44, 122, 123, 0.3);
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(44, 122, 123, 0.4);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+.btn-secondary {
+  background: white;
+  color: var(--primary);
+  border: 2px solid var(--primary);
+  box-shadow: none;
+}
+
+.btn-secondary:hover {
+  background: var(--hover);
+}
+
+.table-container {
+  overflow: auto;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 1200px;
+}
+
+th, td {
+  padding: 16px 12px;
+  text-align: left;
+  font-size: 14px;
+}
+
+th {
+  cursor: pointer;
+  background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+  font-weight: 600;
+  color: var(--primary);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  border-bottom: 2px solid var(--border);
+  user-select: none;
+  transition: background 0.2s ease;
+}
+
+th:hover {
+  background: linear-gradient(135deg, #edf2f7 0%, #e2e8f0 100%);
+}
+
+th::after {
+  content: ' ↕';
+  opacity: 0.3;
+  font-size: 12px;
+}
+
+td {
+  border-bottom: 1px solid var(--border);
+}
+
+tbody tr {
+  transition: background 0.2s ease;
+}
+
+tbody tr:hover {
+  background: var(--hover);
+}
+
+.alert {
+  padding: 16px 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  border-left: 4px solid;
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from { transform: translateX(-20px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+.alert-error {
+  background: #fff5f5;
+  border-color: #e53e3e;
+  color: #c53030;
+}
+
+.alert-success {
+  background: #f0fff4;
+  border-color: #38a169;
+  color: #276749;
+}
+
+footer {
+  text-align: center;
+  padding: 40px 20px;
+  font-size: 14px;
+  color: var(--text-light);
+  background: white;
+  margin-top: 60px;
+  border-top: 1px solid var(--border);
+}
+
+footer a {
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+footer a:hover {
+  color: var(--accent);
+}
+
+.about-content {
+  max-width: 900px;
+  margin: auto;
+  font-size: 16px;
+  line-height: 1.8;
+}
+
+.about-content p {
+  margin-bottom: 16px;
+}
+
+.feature-list {
+  list-style: none;
+  margin: 20px 0;
+}
+
+.feature-list li {
+  padding: 12px 0 12px 30px;
+  position: relative;
+}
+
+.feature-list li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: var(--primary);
+  font-weight: bold;
+  font-size: 18px;
+}
+
+@media(max-width: 768px) {
+  .container {
+    padding: 20px 15px;
+  }
+  
+  .card {
+    padding: 20px;
+  }
+  
+  h2 {
+    font-size: 24px;
+  }
+  
+  h3 {
+    font-size: 20px;
+  }
+}
+
+.hidden {
+  display: none;
+}
+
+.loading {
+  text-align: center;
+  padding: 40px;
+  color: var(--text-light);
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>Registru Psihologi Oncologi România</h1>
+  <div class="subtitle">Platformă centralizată pentru găsirea specialiștilor în psiho-oncologie</div>
+</header>
+
+<nav>
+  <div class="nav-container">
+    <button class="nav-btn active" onclick="navigateTo('registru')">Registru</button>
+    <button class="nav-btn" onclick="navigateTo('despre')">Despre</button>
+    <button class="nav-btn" onclick="navigateTo('contact')">Contact</button>
+  </div>
+</nav>
+
+<div class="container">
+
+<!-- REGISTRU PAGE -->
+<div id="registru" class="page active">
+
+<div class="card">
+<h3>Adaugă Psiholog Nou</h3>
+
+<div class="grid">
+<div class="field">
+<label class="required">Nume psiholog</label>
+<input id="nume" placeholder="Ex: Dr. Andreea Popescu">
+<div class="tooltip">Introduceți numele complet al specialistului.</div>
+</div>
+
+<div class="field">
+<label class="required">Format ședințe</label>
+<select id="format">
+<option value="">Selectează</option>
+<option>Fizic</option>
+<option>Online</option>
+<option>Hibrid</option>
+</select>
+</div>
+
+<div class="field">
+<label class="required">Tip cancer</label>
+<select id="cancer">
+<option value="">Selectează</option>
+<option>General oncologie</option>
+<option>Sân (mamar)</option>
+<option>Pulmonar</option>
+<option>Colorectal</option>
+<option>Prostată</option>
+<option>Pancreatic</option>
+<option>Hepatic (ficat)</option>
+<option>Gastric (stomac)</option>
+<option>Esofagian</option>
+<option>Renal (rinichi)</option>
+<option>Vezică urinară</option>
+<option>Tiroidian</option>
+<option>Melanom</option>
+<option>Cerebral (creier)</option>
+<option>Ovarian</option>
+<option>Uterin (endometrial)</option>
+<option>Cervical</option>
+<option>Testicular</option>
+<option>Hematologic (leucemie, limfom)</option>
+<option>Mielom multiplu</option>
+<option>Sarcom</option>
+<option>Pediatric</option>
+<option>Cap și gât</option>
+<option>Piele (non-melanom)</option>
+<option>Alte tipuri</option>
+</select>
+<div class="tooltip">Selectați specializarea principală.</div>
+</div>
+
+<div class="field">
+<label class="required">Lucrează cu aparținători?</label>
+<select id="apartinatori">
+<option value="">Selectează</option>
+<option>Da</option>
+<option>Nu</option>
+</select>
+</div>
+
+<div class="field">
+<label class="required">Unde activează</label>
+<select id="unde">
+<option value="">Selectează</option>
+<option>Privat</option>
+<option>Spital</option>
+<option>Privat & Spital</option>
+</select>
+</div>
+
+<div class="field">
+<label class="required">Spital</label>
+<input id="spital" placeholder="Ex: Spitalul Universitar de Urgență București">
+<div class="tooltip">Numele spitalului (dacă aplică) sau lăsați gol pentru cabinet privat.</div>
+</div>
+
+<div class="field">
+<label class="required">Oraș</label>
+<input id="oras" placeholder="Ex: București">
+</div>
+
+<div class="field">
+<label>Tarif (Lei/ședință)</label>
+<input type="number" id="tarif" placeholder="Ex: 250">
+<div class="tooltip">Opțional - tariful orientativ pe ședință.</div>
+</div>
+
+<div class="field">
+<label class="required">Limba</label>
+<input id="limba" placeholder="Ex: Română, Engleză" value="Română">
+</div>
+
+<div class="field">
+<label class="required">Experiență (ani)</label>
+<input type="number" id="exp" placeholder="Ex: 8">
+</div>
+
+<div class="field">
+<label class="required">Cod RUP</label>
+<input id="rup" placeholder="Ex: AB123" maxlength="5">
+<div class="tooltip">Cod unic de 5 caractere - nu poate exista duplicat.</div>
+</div>
+
+<div class="field">
+<label class="required">Contact</label>
+<input id="contactInfo" placeholder="Telefon / Email">
+</div>
+</div>
+
+<div id="errorMsg" class="hidden"></div>
+<div id="successMsg" class="hidden"></div>
+
+<br>
+<button onclick="adauga()">Adaugă psiholog</button>
+<button class="btn-secondary" onclick="resetForm()" style="margin-left: 10px;">Resetează formular</button>
+</div>
+
+<div class="card">
+<h3>Filtre</h3>
+<div class="grid" id="filtre">
+  <div class="field">
+    <label>Format ședințe</label>
+    <select onchange="aplicaFiltre()">
+      <option value="">Toate</option>
+      <option>Fizic</option>
+      <option>Online</option>
+      <option>Hibrid</option>
+    </select>
+  </div>
+  
+  <div class="field">
+    <label>Tip cancer</label>
+    <select onchange="aplicaFiltre()">
+      <option value="">Toate</option>
+      <option>General oncologie</option>
+      <option>Sân (mamar)</option>
+      <option>Pulmonar</option>
+      <option>Colorectal</option>
+      <option>Prostată</option>
+      <option>Pancreatic</option>
+      <option>Hepatic (ficat)</option>
+      <option>Gastric (stomac)</option>
+      <option>Esofagian</option>
+      <option>Renal (rinichi)</option>
+      <option>Vezică urinară</option>
+      <option>Tiroidian</option>
+      <option>Melanom</option>
+      <option>Cerebral (creier)</option>
+      <option>Ovarian</option>
+      <option>Uterin (endometrial)</option>
+      <option>Cervical</option>
+      <option>Testicular</option>
+      <option>Hematologic (leucemie, limfom)</option>
+      <option>Mielom multiplu</option>
+      <option>Sarcom</option>
+      <option>Pediatric</option>
+      <option>Cap și gât</option>
+      <option>Piele (non-melanom)</option>
+      <option>Alte tipuri</option>
+    </select>
+  </div>
+  
+  <div class="field">
+    <label>Lucrează cu aparținători</label>
+    <select onchange="aplicaFiltre()">
+      <option value="">Toate</option>
+      <option>Da</option>
+      <option>Nu</option>
+    </select>
+  </div>
+  
+  <div class="field">
+    <label>Unde activează</label>
+    <select onchange="aplicaFiltre()">
+      <option value="">Toate</option>
+      <option>Privat</option>
+      <option>Spital</option>
+      <option>Privat & Spital</option>
+    </select>
+  </div>
+  
+  <div class="field">
+    <label>Oraș</label>
+    <input type="text" placeholder="Caută oraș..." onkeyup="aplicaFiltre()">
+  </div>
+  
+  <div class="field">
+    <label>Nume psiholog</label>
+    <input type="text" placeholder="Caută nume..." onkeyup="aplicaFiltre()">
+  </div>
+</div>
+<button class="btn-secondary" onclick="resetFiltre()">Resetează filtre</button>
+</div>
+
+<div class="card table-container">
+<h3>Psihologi Înregistrați (<span id="count">0</span>)</h3>
+<div id="loadingTable" class="loading hidden">Se încarcă datele...</div>
+<table id="tabel">
+<thead>
+<tr>
+<th onclick="sortTable(0)">Nume</th>
+<th onclick="sortTable(1)">Format ședințe</th>
+<th onclick="sortTable(2)">Tip cancer</th>
+<th onclick="sortTable(3)">Aparținători</th>
+<th onclick="sortTable(4)">Unde activează</th>
+<th onclick="sortTable(5)">Spital</th>
+<th onclick="sortTable(6)">Oraș</th>
+<th onclick="sortTable(7)">Tarif</th>
+<th onclick="sortTable(8)">Limba</th>
+<th onclick="sortTable(9)">Experiență</th>
+<th onclick="sortTable(10)">Cod RUP</th>
+<th onclick="sortTable(11)">Contact</th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+</div>
+
+</div>
+
+<!-- DESPRE PAGE -->
+<div id="despre" class="page">
+<div class="card">
+<div class="about-content">
+<h2>Despre Platformă</h2>
+
+<p>Registrul Psihologilor Oncologi din România este o platformă centralizată care facilitează accesul pacienților oncologici și aparținătorilor acestora la servicii de sprijin psihologic specializat.</p>
+
+<h3>De ce este importantă psiho-oncologia?</h3>
+
+<p>Diagnosticul de cancer aduce cu sine nu doar provocări medicale, ci și un impact psihologic profund asupra pacienților și familiilor lor. Psiho-oncologia este o subspecialitate care abordează nevoile emoționale, sociale și spirituale ale persoanelor afectate de cancer, oferind suport în:</p>
+
+<ul class="feature-list">
+<li>Gestionarea anxietății și depresiei asociate diagnosticului</li>
+<li>Adaptarea la schimbările aduse de boală și tratament</li>
+<li>Îmbunătățirea calității vieții în timpul și după tratament</li>
+<li>Sprijinirea procesului decizional medical</li>
+<li>Facilitarea comunicării cu echipa medicală și familia</li>
+<li>Gestionarea durerii și simptomelor</li>
+<li>Suport pentru aparținători și îngrijitori</li>
+</ul>
+
+<h3>Despre acest registru</h3>
+
+<p>Platforma oferă o bază de date completă și actualizată cu psihologi specializați în oncologie din România, permițând căutarea și filtrarea după multiple criterii:</p>
+
+<ul class="feature-list">
+<li><strong>Format ședințe:</strong> Fizic, Online sau Hibrid</li>
+<li><strong>Specializare:</strong> Tip specific de cancer sau oncologie generală</li>
+<li><strong>Locație:</strong> Oraș și spital/clinică</li>
+<li><strong>Servicii:</strong> Lucru cu aparținători, tarife, experiență</li>
+<li><strong>Contact:</strong> Informații de contact direct</li>
+</ul>
+
+<h3>Cum funcționează?</h3>
+
+<p>Platforma este deschisă și colaborativă. Psihologii oncologi pot adăuga propriul profil completând un formular simplu cu informații verificabile (cod RUP obligatoriu pentru autenticitate).</p>
+
+<p>Pacienții și aparținătorii pot căuta și filtra psihologi în funcție de nevoile lor specifice, pot sorta rezultatele și pot contacta direct specialiștii.</p>
+
+<h3>Confidențialitate și date</h3>
+
+<p>Datele sunt stocate în cloud folosind Supabase. Informațiile afișate sunt publice și adăugate voluntar de specialiști.</p>
+
+<h3>Contact și suport</h3>
+
+<p>Pentru întrebări, sugestii sau raportarea problemelor tehnice, vă rugăm să utilizați formularul de <a href="#" onclick="navigateTo('contact'); return false;">contact</a>.</p>
+
+<p style="margin-top: 30px; font-style: italic; color: var(--text-light);">Acest proiect a fost creat pentru a facilita accesul la servicii de psiho-oncologie de calitate în România și pentru a susține pacienții oncologici în călătoria lor.</p>
+
+</div>
+</div>
+</div>
+
+<!-- CONTACT PAGE -->
+<div id="contact" class="page">
+<div class="card">
+
+<h2 style="color: var(--primary); margin-bottom: 30px;">Contactează-ne</h2>
+
+<p style="margin-bottom: 30px; font-size: 16px; line-height: 1.6;">
+Ai întrebări despre platformă? Vrei să raportezi o problemă tehnică sau să sugerezi îmbunătățiri? Trimite-ne un mesaj direct pe WhatsApp!
+</p>
+
+<div style="max-width: 600px; margin: 0 auto;">
+
+<div style="margin-bottom: 20px;">
+<label style="display: block; font-weight: 600; margin-bottom: 8px; font-size: 14px;">
+Numele tău <span style="color: red;">*</span>
+</label>
+<input type="text" id="contactNume" placeholder="Ex: Maria Popescu" 
+       style="width: 100%; padding: 12px; border: 2px solid #e0e6ed; border-radius: 8px; font-size: 15px;">
+</div>
+
+<div style="margin-bottom: 20px;">
+<label style="display: block; font-weight: 600; margin-bottom: 8px; font-size: 14px;">
+Subiect <span style="color: red;">*</span>
+</label>
+<select id="contactSubiect" 
+        style="width: 100%; padding: 12px; border: 2px solid #e0e6ed; border-radius: 8px; font-size: 15px;">
+<option value="">Selectează un subiect</option>
+<option value="Problemă tehnică">Problemă tehnică</option>
+<option value="Sugestie de îmbunătățire">Sugestie de îmbunătățire</option>
+<option value="Întrebare generală">Întrebare generală</option>
+<option value="Raportare informație incorectă">Raportare informație incorectă</option>
+<option value="Altele">Altele</option>
+</select>
+</div>
+
+<div style="margin-bottom: 20px;">
+<label style="display: block; font-weight: 600; margin-bottom: 8px; font-size: 14px;">
+Mesajul tău <span style="color: red;">*</span>
+</label>
+<textarea id="contactMesaj" placeholder="Scrie aici mesajul tău..."
+          style="width: 100%; padding: 12px; border: 2px solid #e0e6ed; border-radius: 8px; font-size: 15px; min-height: 150px; font-family: inherit; resize: vertical;"></textarea>
+</div>
+
+<button onclick="trimiteWhatsApp()" 
+        style="width: 100%; padding: 16px 28px; background: linear-gradient(135deg, #25D366 0%, #128C7E 100%); color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3); transition: all 0.3s ease;">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+<path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+</svg>
+Trimite pe WhatsApp
+</button>
+
+<p style="margin-top: 20px; font-size: 13px; color: #6b7280; text-align: center;">
+Mesajul va fi deschis în WhatsApp. Toate câmpurile marcate cu <span style="color: red;">*</span> sunt obligatorii.
+</p>
+
+</div>
+
+</div>
+</div>
+
+</div>
+
+<footer>
+  ©2026 Creat de <a href="https://www.psyalexsimion.com" target="_blank">Alex Simion</a>
+</footer>
+
+<script>
+// ============================================
+// SUPABASE CONFIGURATION
+// ============================================
+// TODO: Replace with your actual Supabase credentials
+var SUPABASE_URL = 'https://kkqjpostclprrszkbywh.supabase.co';  // Ex: https://xxxxx.supabase.co
+var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtrcWpwb3N0Y2xwcnJzemtieXdoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEwMzA4MzcsImV4cCI6MjA4NjYwNjgzN30.itJpvfxwKUnqu_GjLk6-raARlGTfCG7TUrX2SYF1nQo';
+
+// Initialize Supabase client
+var supabaseClient = null;
+var useSupabase = false;
+
+// Check if Supabase is configured
+if (SUPABASE_URL !== 'YOUR_SUPABASE_URL_HERE' && SUPABASE_ANON_KEY !== 'YOUR_SUPABASE_ANON_KEY_HERE') {
+  try {
+    if (typeof window.supabase !== 'undefined') {
+      supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      useSupabase = true;
+      console.log('✅ Supabase configured and ready');
+    }
+  } catch (e) {
+    console.warn('⚠️ Supabase not available, using localStorage');
+    useSupabase = false;
+  }
+} else {
+  console.warn('⚠️ Supabase not configured, using localStorage');
+}
+
+// ============================================
+// DATA MANAGEMENT
+// ============================================
+var psihologi = [];
+var sortState = { column: -1, ascending: true };
+
+// Load data from Supabase
+async function loadFromSupabase() {
+  if (!useSupabase) {
+    // Fallback to localStorage
+    psihologi = JSON.parse(localStorage.getItem("psihologi")) || [];
+    render();
+    return;
+  }
+  
+  try {
+    document.getElementById('loadingTable').classList.remove('hidden');
+    
+    var result = await supabaseClient
+      .from('psihologi')
+      .select('*')
+      .order('created_at', { ascending: false });
+    
+    if (result.error) throw result.error;
+    
+    psihologi = result.data || [];
+    render();
+    document.getElementById('loadingTable').classList.add('hidden');
+  } catch (error) {
+    console.error('Error loading from Supabase:', error);
+    console.warn('Falling back to localStorage');
+    psihologi = JSON.parse(localStorage.getItem("psihologi")) || [];
+    render();
+    document.getElementById('loadingTable').classList.add('hidden');
+  }
+}
+
+// Save to Supabase
+async function saveToSupabase(psiholog) {
+  if (!useSupabase) {
+    // Fallback to localStorage
+    localStorage.setItem("psihologi", JSON.stringify(psihologi));
+    return psiholog;
+  }
+  
+  try {
+    var result = await supabaseClient
+      .from('psihologi')
+      .insert([psiholog])
+      .select();
+    
+    if (result.error) throw result.error;
+    
+    // Also save to localStorage as backup
+    localStorage.setItem("psihologi", JSON.stringify(psihologi));
+    
+    return result.data[0];
+  } catch (error) {
+    console.error('Error saving to Supabase:', error);
+    console.warn('Falling back to localStorage');
+    localStorage.setItem("psihologi", JSON.stringify(psihologi));
+    return psiholog;
+  }
+}
+
+// ============================================
+// VALIDATION
+// ============================================
+function valideaza(psiholog) {
+  var errors = [];
+  
+  if (!psiholog.nume.trim()) errors.push("Nume psiholog este obligatoriu");
+  if (!psiholog.format) errors.push("Format ședințe este obligatoriu");
+  if (!psiholog.cancer) errors.push("Tip cancer este obligatoriu");
+  if (!psiholog.apartinatori) errors.push("Lucrează cu aparținători este obligatoriu");
+  if (!psiholog.unde) errors.push("Unde activează este obligatoriu");
+  if (!psiholog.spital.trim()) errors.push("Spital este obligatoriu");
+  if (!psiholog.oras.trim()) errors.push("Oraș este obligatoriu");
+  if (!psiholog.limba.trim()) errors.push("Limba este obligatorie");
+  if (!psiholog.exp) errors.push("Experiență este obligatorie");
+  if (!psiholog.rup.trim()) errors.push("Cod RUP este obligatoriu");
+  if (psiholog.rup.trim().length !== 5) errors.push("Cod RUP trebuie să aibă exact 5 caractere");
+  if (!psiholog.contact.trim()) errors.push("Contact este obligatoriu");
+  
+  return errors;
+}
+
+// ============================================
+// UI FUNCTIONS
+// ============================================
+function showMessage(elementId, message, type) {
+  var el = document.getElementById(elementId);
+  el.className = type === 'error' ? 'alert alert-error' : 'alert alert-success';
+  el.textContent = message;
+  el.classList.remove('hidden');
+  
+  setTimeout(function() {
+    el.classList.add('hidden');
+  }, 5000);
+}
+
+function resetForm() {
+  var inputs = document.querySelectorAll("#registru input, #registru select");
+  for (var i = 0; i < inputs.length; i++) {
+    if (inputs[i].id === 'limba') {
+      inputs[i].value = 'Română';
+    } else {
+      inputs[i].value = '';
+    }
+  }
+  document.getElementById('errorMsg').classList.add('hidden');
+  document.getElementById('successMsg').classList.add('hidden');
+}
+
+// ============================================
+// ADD PSYCHOLOGIST
+// ============================================
+async function adauga() {
+  var rup = document.getElementById("rup").value.trim().toUpperCase();
+  
+  var psiholog = {
+    nume: document.getElementById("nume").value.trim(),
+    format: document.getElementById("format").value,
+    cancer: document.getElementById("cancer").value,
+    apartinatori: document.getElementById("apartinatori").value,
+    unde: document.getElementById("unde").value,
+    spital: document.getElementById("spital").value.trim(),
+    oras: document.getElementById("oras").value.trim(),
+    tarif: document.getElementById("tarif").value,
+    limba: document.getElementById("limba").value.trim(),
+    exp: document.getElementById("exp").value,
+    rup: rup,
+    contact: document.getElementById("contactInfo").value.trim()
+  };
+  
+  // Validate
+  var errors = valideaza(psiholog);
+  if (errors.length > 0) {
+    showMessage('errorMsg', '❌ ' + errors.join(', '), 'error');
+    return;
+  }
+  
+  // Check duplicate RUP
+  var duplicate = false;
+  for (var i = 0; i < psihologi.length; i++) {
+    if (psihologi[i].rup === rup) {
+      duplicate = true;
+      break;
+    }
+  }
+  
+  if (duplicate) {
+    showMessage('errorMsg', '❌ Cod RUP deja existent în baza de date', 'error');
+    return;
+  }
+  
+  try {
+    // Add to local array first
+    psihologi.push(psiholog);
+    
+    // Save to Supabase or localStorage
+    var savedPsiholog = await saveToSupabase(psiholog);
+    
+    // Update the array with the saved version (which may have an ID from Supabase)
+    if (savedPsiholog && savedPsiholog.id) {
+      psihologi[psihologi.length - 1] = savedPsiholog;
+    }
+    
+    render();
+    resetForm();
+    
+    var storageType = useSupabase ? 'Supabase' : 'localStorage';
+    showMessage('successMsg', '✓ Psiholog adăugat cu succes în ' + storageType + '!', 'success');
+    
+    // Scroll to table
+    document.querySelector('.table-container').scrollIntoView({ behavior: 'smooth' });
+  } catch (error) {
+    console.error('Error in adauga():', error);
+    showMessage('errorMsg', '❌ Eroare la salvare: ' + (error.message || error), 'error');
+  }
+}
+
+// ============================================
+// RENDER TABLE
+// ============================================
+function render(filteredData) {
+  var data = filteredData || psihologi;
+  var tbody = document.querySelector("#tabel tbody");
+  tbody.innerHTML = "";
+  
+  document.getElementById('count').textContent = data.length;
+  
+  if (data.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="12" style="text-align:center; padding:40px; color: var(--text-light);">Nu există psihologi în registru sau nu există rezultate pentru filtrele aplicate.</td></tr>';
+    return;
+  }
+  
+  for (var i = 0; i < data.length; i++) {
+    var p = data[i];
+    var row = document.createElement('tr');
+    row.innerHTML = 
+      '<td><strong>' + p.nume + '</strong></td>' +
+      '<td>' + p.format + '</td>' +
+      '<td>' + p.cancer + '</td>' +
+      '<td>' + p.apartinatori + '</td>' +
+      '<td>' + p.unde + '</td>' +
+      '<td>' + p.spital + '</td>' +
+      '<td>' + p.oras + '</td>' +
+      '<td>' + (p.tarif ? p.tarif + ' Lei' : '-') + '</td>' +
+      '<td>' + p.limba + '</td>' +
+      '<td>' + p.exp + ' ani</td>' +
+      '<td><code style="background:#f0f4f5; padding:2px 6px; border-radius:4px;">' + p.rup + '</code></td>' +
+      '<td>' + p.contact + '</td>';
+    tbody.appendChild(row);
+  }
+}
+
+// ============================================
+// SORT TABLE
+// ============================================
+function sortTable(columnIndex) {
+  var table = document.getElementById("tabel");
+  var tbody = table.tBodies[0];
+  var rows = Array.prototype.slice.call(tbody.rows);
+  
+  // Skip if no data
+  if (rows.length === 0 || rows[0].cells.length === 1) return;
+  
+  // Determine sort direction
+  var ascending = sortState.column === columnIndex ? !sortState.ascending : true;
+  sortState = { column: columnIndex, ascending: ascending };
+  
+  rows.sort(function(a, b) {
+    var aVal = a.cells[columnIndex].innerText.toLowerCase();
+    var bVal = b.cells[columnIndex].innerText.toLowerCase();
+    
+    // Handle numbers
+    var aNum = parseFloat(aVal.replace(/[^\d.-]/g, ''));
+    var bNum = parseFloat(bVal.replace(/[^\d.-]/g, ''));
+    
+    if (!isNaN(aNum) && !isNaN(bNum)) {
+      return ascending ? aNum - bNum : bNum - aNum;
+    }
+    
+    // String comparison
+    return ascending ? aVal.localeCompare(bVal, 'ro') : bVal.localeCompare(aVal, 'ro');
+  });
+  
+  for (var i = 0; i < rows.length; i++) {
+    tbody.appendChild(rows[i]);
+  }
+  
+  // Update visual indicator
+  var ths = table.querySelectorAll('th');
+  for (var i = 0; i < ths.length; i++) {
+    var arrow = i === columnIndex ? (ascending ? ' ↑' : ' ↓') : ' ↕';
+    var text = ths[i].innerHTML.split(' ')[0];
+    ths[i].innerHTML = text + arrow;
+  }
+}
+
+// ============================================
+// FILTERS
+// ============================================
+function aplicaFiltre() {
+  var filtersContainer = document.getElementById('filtre');
+  var filterInputs = filtersContainer.querySelectorAll('select, input');
+  
+  var filtered = psihologi.slice();
+  
+  for (var idx = 0; idx < filterInputs.length; idx++) {
+    var input = filterInputs[idx];
+    var value = input.value.toLowerCase().trim();
+    if (!value) continue;
+    
+    filtered = filtered.filter(function(p) {
+      switch(idx) {
+        case 0: return p.format.toLowerCase().indexOf(value) !== -1;
+        case 1: return p.cancer.toLowerCase().indexOf(value) !== -1;
+        case 2: return p.apartinatori.toLowerCase().indexOf(value) !== -1;
+        case 3: return p.unde.toLowerCase().indexOf(value) !== -1;
+        case 4: return p.oras.toLowerCase().indexOf(value) !== -1;
+        case 5: return p.nume.toLowerCase().indexOf(value) !== -1;
+        default: return true;
+      }
+    });
+  }
+  
+  render(filtered);
+}
+
+function resetFiltre() {
+  var filters = document.querySelectorAll('#filtre select, #filtre input');
+  for (var i = 0; i < filters.length; i++) {
+    filters[i].value = '';
+  }
+  render();
+}
+
+// ============================================
+// NAVIGATION
+// ============================================
+function navigateTo(pageId) {
+  console.log('Navigating to:', pageId);
+  
+  // Hide all pages
+  var pages = document.querySelectorAll('.page');
+  for (var i = 0; i < pages.length; i++) {
+    pages[i].classList.remove('active');
+  }
+  
+  // Show selected page
+  var selectedPage = document.getElementById(pageId);
+  if (selectedPage) {
+    selectedPage.classList.add('active');
+  }
+  
+  // Update nav buttons
+  var buttons = document.querySelectorAll('.nav-btn');
+  for (var i = 0; i < buttons.length; i++) {
+    buttons[i].classList.remove('active');
+    var btnText = buttons[i].textContent.toLowerCase().trim();
+    if ((pageId === 'registru' && btnText === 'registru') ||
+        (pageId === 'despre' && btnText === 'despre') ||
+        (pageId === 'contact' && btnText === 'contact')) {
+      buttons[i].classList.add('active');
+    }
+  }
+  
+  // Scroll to top
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ============================================
+// WHATSAPP CONTACT
+// ============================================
+function trimiteWhatsApp() {
+  var nume = document.getElementById('contactNume').value.trim();
+  var subiect = document.getElementById('contactSubiect').value;
+  var mesaj = document.getElementById('contactMesaj').value.trim();
+  
+  // Validation
+  if (!nume) {
+    alert('❌ Te rugăm să introduci numele tău!');
+    document.getElementById('contactNume').focus();
+    return;
+  }
+  
+  if (!subiect) {
+    alert('❌ Te rugăm să selectezi un subiect!');
+    document.getElementById('contactSubiect').focus();
+    return;
+  }
+  
+  if (!mesaj) {
+    alert('❌ Te rugăm să introduci un mesaj!');
+    document.getElementById('contactMesaj').focus();
+    return;
+  }
+  
+  // Create WhatsApp message
+  var whatsappText = 'Salut! Am o intrebare despre Registrul Psihologi Oncologi.\n\n';
+  whatsappText += 'Nume: ' + nume + '\n';
+  whatsappText += 'Subiect: ' + subiect + '\n\n';
+  whatsappText += 'Mesaj:\n' + mesaj;
+  
+  // WhatsApp URL
+  var whatsappURL = 'https://wa.me/40749255366?text=' + encodeURIComponent(whatsappText);
+  
+  // Open WhatsApp
+  window.open(whatsappURL, '_blank');
+  
+  // Clear form
+  document.getElementById('contactNume').value = '';
+  document.getElementById('contactSubiect').value = '';
+  document.getElementById('contactMesaj').value = '';
+  
+  // Success message
+  setTimeout(function() {
+    alert('✅ WhatsApp a fost deschis! Apasă "Send" pentru a trimite mesajul.');
+  }, 500);
+}
+
+// ============================================
+// INITIALIZE
+// ============================================
+loadFromSupabase();
+
+// Add sample data if empty (only for testing)
+setTimeout(function() {
+  if (psihologi.length === 0 && !useSupabase) {
+    var sampleData = [
+      {
+        nume: "Dr. Elena Marinescu",
+        format: "Hibrid",
+        cancer: "General oncologie",
+        apartinatori: "Da",
+        unde: "Privat & Spital",
+        spital: "Spitalul Universitar de Urgență București",
+        oras: "București",
+        tarif: "250",
+        limba: "Română, Engleză",
+        exp: "12",
+        rup: "EM123",
+        contact: "0721234567"
+      },
+      {
+        nume: "Psih. Andrei Popescu",
+        format: "Online",
+        cancer: "Sân (mamar)",
+        apartinatori: "Da",
+        unde: "Privat",
+        spital: "Cabinet privat",
+        oras: "Cluj-Napoca",
+        tarif: "200",
+        limba: "Română",
+        exp: "8",
+        rup: "AP456",
+        contact: "andrei.pop@email.com"
+      },
+      {
+        nume: "Dr. Maria Ionescu",
+        format: "Fizic",
+        cancer: "Pediatric",
+        apartinatori: "Da",
+        unde: "Spital",
+        spital: "Spitalul Clinic de Copii Marie Curie",
+        oras: "București",
+        tarif: "",
+        limba: "Română, Franceză",
+        exp: "15",
+        rup: "MI789",
+        contact: "0745678901"
+      }
+    ];
+    
+    psihologi = sampleData;
+    localStorage.setItem("psihologi", JSON.stringify(psihologi));
+    render();
+    console.log('✅ Sample data loaded');
+  }
+}, 500);
+</script>
+
+</body>
+</html>
