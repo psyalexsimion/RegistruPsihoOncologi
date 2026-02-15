@@ -21,10 +21,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Replace Supabase credentials
+      - name: Replace credentials
         run: |
           sed -i "s|YOUR_SUPABASE_URL_HERE|${{ secrets.SUPABASE_URL }}|g" index.html
           sed -i "s|YOUR_SUPABASE_ANON_KEY_HERE|${{ secrets.SUPABASE_ANON_KEY }}|g" index.html
+          cat index.html | grep SUPABASE_URL
+          cat index.html | grep SUPABASE_ANON_KEY
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
