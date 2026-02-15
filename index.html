@@ -904,20 +904,33 @@ var SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY_HERE';
 var supabaseClient = null;
 var useSupabase = false;
 
-if (SUPABASE_URL !== 'YOUR_SUPABASE_URL_HERE' && SUPABASE_ANON_KEY !== 'YOUR_SUPABASE_ANON_KEY_HERE') {
+if (
+  typeof SUPABASE_URL === 'string' &&
+  typeof SUPABASE_ANON_KEY === 'string' &&
+  SUPABASE_URL.startsWith('https://') &&
+  SUPABASE_ANON_KEY.startsWith('ey')
+) {
   try {
     if (typeof window.supabase !== 'undefined') {
-      supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      supabaseClient = window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY
+      );
       useSupabase = true;
       console.log('✅ Supabase configured and ready');
+    } else {
+      console.warn('⚠️ Supabase library not loaded, using localStorage');
+      useSupabase = false;
     }
   } catch (e) {
-    console.warn('⚠️ Supabase not available, using localStorage');
+    console.warn('⚠️ Supabase initialization failed, using localStorage');
     useSupabase = false;
   }
 } else {
-  console.warn('⚠️ Supabase not configured, using localStorage');
+  console.warn('⚠️ Invalid Supabase config, using localStorage');
+  useSupabase = false;
 }
+
 
 // ============================================
 // DATA MANAGEMENT
