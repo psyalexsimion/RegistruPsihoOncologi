@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Registru Psihologi Oncologi România</title>
+<title>Registru Psiho-Oncologi România</title>
 
 <!-- Supabase JS Client -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -96,12 +96,12 @@ nav {
 }
 
 .nav-btn {
-  padding: 10px 24px;
+  padding: 10px 20px;
   border: none;
   background: transparent;
   color: var(--text);
   font-family: 'Lora', serif;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 500;
   cursor: pointer;
   border-radius: 8px;
@@ -403,6 +403,26 @@ footer a:hover {
   font-size: 18px;
 }
 
+.thanks-list {
+  list-style: none;
+  margin: 30px 0;
+}
+
+.thanks-list li {
+  padding: 20px;
+  margin-bottom: 15px;
+  background: var(--hover);
+  border-radius: 10px;
+  border-left: 4px solid var(--accent);
+}
+
+.thanks-list li strong {
+  color: var(--primary);
+  font-size: 18px;
+  display: block;
+  margin-bottom: 5px;
+}
+
 @media(max-width: 768px) {
   .container {
     padding: 20px 15px;
@@ -418,6 +438,11 @@ footer a:hover {
   
   h3 {
     font-size: 20px;
+  }
+  
+  .nav-btn {
+    font-size: 13px;
+    padding: 8px 16px;
   }
 }
 
@@ -442,19 +467,22 @@ footer a:hover {
 
 <nav>
   <div class="nav-container">
-    <button class="nav-btn active" onclick="navigateTo('registru')">Registru</button>
+    <button class="nav-btn active" onclick="navigateTo('inregistrare')">Vreau să mă înregistrez</button>
+    <button class="nav-btn" onclick="navigateTo('cautare')">Caut un psiho-oncolog</button>
     <button class="nav-btn" onclick="navigateTo('despre')">Despre</button>
+    <button class="nav-btn" onclick="navigateTo('multumiri')">Mulțumiri</button>
     <button class="nav-btn" onclick="navigateTo('contact')">Contact</button>
   </div>
 </nav>
 
 <div class="container">
 
-<!-- REGISTRU PAGE -->
-<div id="registru" class="page active">
+<!-- ÎNREGISTRARE PAGE -->
+<div id="inregistrare" class="page active">
 
 <div class="card">
-<h3>Adaugă Psiholog Nou</h3>
+<h2>Înregistrare Psiholog</h2>
+<p style="margin-bottom: 30px; color: var(--text-light);">Completează formularul de mai jos pentru a te înregistra în registrul psihologilor oncologi din România.</p>
 
 <div class="grid">
 <div class="field">
@@ -571,11 +599,19 @@ footer a:hover {
 <div id="successMsg" class="hidden"></div>
 
 <br>
-<button onclick="adauga()">Adaugă psiholog</button>
+<button onclick="adauga()">Înregistrează psiholog</button>
 <button class="btn-secondary" onclick="resetForm()" style="margin-left: 10px;">Resetează formular</button>
 </div>
 
+</div>
+
+<!-- CĂUTARE PAGE -->
+<div id="cautare" class="page">
+
 <div class="card">
+<h2>Caută Psiholog Oncolog</h2>
+<p style="margin-bottom: 30px; color: var(--text-light);">Folosește filtrele de mai jos pentru a găsi psihologul potrivit nevoilor tale.</p>
+
 <h3>Filtre</h3>
 <div class="grid" id="filtre">
   <div class="field">
@@ -714,7 +750,7 @@ footer a:hover {
 
 <h3>Cum funcționează?</h3>
 
-<p>Platforma este deschisă și colaborativă. Psihologii oncologi pot adăuga propriul profil completând un formular simplu cu informații verificabile (cod RUP obligatoriu pentru introducere unica).</p>
+<p>Platforma este deschisă și colaborativă. Psihologii oncologi pot adăuga propriul profil completând un formular simplu cu informații verificabile (cod RUP obligatoriu pentru autenticitate).</p>
 
 <p>Pacienții și aparținătorii pot căuta și filtra psihologi în funcție de nevoile lor specifice, pot sorta rezultatele și pot contacta direct specialiștii.</p>
 
@@ -727,6 +763,63 @@ footer a:hover {
 <p>Pentru întrebări, sugestii sau raportarea problemelor tehnice, vă rugăm să utilizați formularul de <a href="#" onclick="navigateTo('contact'); return false;">contact</a>.</p>
 
 <p style="margin-top: 30px; font-style: italic; color: var(--text-light);">Acest proiect a fost creat pentru a facilita accesul la servicii de psiho-oncologie de calitate în România și pentru a susține pacienții oncologici în călătoria lor.</p>
+
+</div>
+</div>
+</div>
+
+<!-- MULȚUMIRI PAGE -->
+<div id="multumiri" class="page">
+<div class="card">
+<div class="about-content">
+<h2>Mulțumiri</h2>
+
+<p>Această platformă nu ar fi fost posibilă fără contribuția și sprijinul unor persoane și organizații dedicate. Dorim să le mulțumim tuturor celor care au făcut posibilă crearea și menținerea acestui registru.</p>
+
+<h3>Echipa de dezvoltare</h3>
+
+<ul class="thanks-list">
+<li>
+<strong>Alex Simion</strong>
+Psiholog, inițiator și coordonator al proiectului Registru Psiho-Oncologi România. Viziunea și dedicarea sa au transformat această idee într-o realitate care ajută pacienții și familiile afectate de cancer.
+</li>
+</ul>
+
+<h3>Tehnologie și dezvoltare</h3>
+
+<ul class="thanks-list">
+<li>
+<strong>Claude (Anthropic)</strong>
+Asistent AI care a contribuit la dezvoltarea tehnică a platformei, asigurând o experiență utilizator optimă și funcționalități moderne.
+</li>
+
+<li>
+<strong>Supabase</strong>
+Platformă open-source pentru baza de date care oferă hosting gratuit și sigur pentru datele psihologilor înregistrați.
+</li>
+</ul>
+
+<h3>Comunitatea psiho-oncologică</h3>
+
+<ul class="thanks-list">
+<li>
+<strong>Psihologii oncologi din România</strong>
+Tuturor specialiștilor care s-au înregistrat și își dedică timpul și expertiza pentru a ajuta pacienții oncologici și familiile lor. Voi sunteți pilonii acestei comunități.
+</li>
+
+<li>
+<strong>Asociațiile de pacienți</strong>
+Pentru feedback-ul valoros și pentru că ne-au ajutat să înțelegem mai bine nevoile pacienților și ale aparținătorilor.
+</li>
+</ul>
+
+<h3>Contribuie și tu!</h3>
+
+<p style="margin-top: 30px;">Dacă dorești să contribui la îmbunătățirea acestei platforme sau ai sugestii, te rugăm să ne contactezi prin formularul de <a href="#" onclick="navigateTo('contact'); return false;">contact</a>.</p>
+
+<p style="margin-top: 20px; font-style: italic; color: var(--text-light);">
+Împreună putem face diferența în viețile celor afectați de cancer. Mulțumim pentru sprijin! ❤️
+</p>
 
 </div>
 </div>
@@ -803,15 +896,12 @@ Mesajul va fi deschis în WhatsApp. Toate câmpurile marcate cu <span style="col
 // ============================================
 // SUPABASE CONFIGURATION
 // ============================================
-// TODO: Replace with your actual Supabase credentials
-var SUPABASE_URL = 'https://kkqjpostclprrszkbywh.supabase.co';  // Ex: https://xxxxx.supabase.co
-var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtrcWpwb3N0Y2xwcnJzemtieXdoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEwMzA4MzcsImV4cCI6MjA4NjYwNjgzN30.itJpvfxwKUnqu_GjLk6-raARlGTfCG7TUrX2SYF1nQo';
+var SUPABASE_URL = 'YOUR_SUPABASE_URL_HERE';
+var SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY_HERE';
 
-// Initialize Supabase client
 var supabaseClient = null;
 var useSupabase = false;
 
-// Check if Supabase is configured
 if (SUPABASE_URL !== 'YOUR_SUPABASE_URL_HERE' && SUPABASE_ANON_KEY !== 'YOUR_SUPABASE_ANON_KEY_HERE') {
   try {
     if (typeof window.supabase !== 'undefined') {
@@ -833,10 +923,8 @@ if (SUPABASE_URL !== 'YOUR_SUPABASE_URL_HERE' && SUPABASE_ANON_KEY !== 'YOUR_SUP
 var psihologi = [];
 var sortState = { column: -1, ascending: true };
 
-// Load data from Supabase
 async function loadFromSupabase() {
   if (!useSupabase) {
-    // Fallback to localStorage
     psihologi = JSON.parse(localStorage.getItem("psihologi")) || [];
     render();
     return;
@@ -864,10 +952,8 @@ async function loadFromSupabase() {
   }
 }
 
-// Save to Supabase
 async function saveToSupabase(psiholog) {
   if (!useSupabase) {
-    // Fallback to localStorage
     localStorage.setItem("psihologi", JSON.stringify(psihologi));
     return psiholog;
   }
@@ -880,7 +966,6 @@ async function saveToSupabase(psiholog) {
     
     if (result.error) throw result.error;
     
-    // Also save to localStorage as backup
     localStorage.setItem("psihologi", JSON.stringify(psihologi));
     
     return result.data[0];
@@ -929,7 +1014,7 @@ function showMessage(elementId, message, type) {
 }
 
 function resetForm() {
-  var inputs = document.querySelectorAll("#registru input, #registru select");
+  var inputs = document.querySelectorAll("#inregistrare input, #inregistrare select");
   for (var i = 0; i < inputs.length; i++) {
     if (inputs[i].id === 'limba') {
       inputs[i].value = 'Română';
@@ -962,14 +1047,12 @@ async function adauga() {
     contact: document.getElementById("contactInfo").value.trim()
   };
   
-  // Validate
   var errors = valideaza(psiholog);
   if (errors.length > 0) {
     showMessage('errorMsg', '❌ ' + errors.join(', '), 'error');
     return;
   }
   
-  // Check duplicate RUP
   var duplicate = false;
   for (var i = 0; i < psihologi.length; i++) {
     if (psihologi[i].rup === rup) {
@@ -984,13 +1067,10 @@ async function adauga() {
   }
   
   try {
-    // Add to local array first
     psihologi.push(psiholog);
     
-    // Save to Supabase or localStorage
     var savedPsiholog = await saveToSupabase(psiholog);
     
-    // Update the array with the saved version (which may have an ID from Supabase)
     if (savedPsiholog && savedPsiholog.id) {
       psihologi[psihologi.length - 1] = savedPsiholog;
     }
@@ -999,10 +1079,12 @@ async function adauga() {
     resetForm();
     
     var storageType = useSupabase ? 'Supabase' : 'localStorage';
-    showMessage('successMsg', '✓ Psiholog adăugat cu succes în ' + storageType + '!', 'success');
+    showMessage('successMsg', '✓ Psiholog înregistrat cu succes în ' + storageType + '!', 'success');
     
-    // Scroll to table
-    document.querySelector('.table-container').scrollIntoView({ behavior: 'smooth' });
+    setTimeout(function() {
+      navigateTo('cautare');
+      document.querySelector('.table-container').scrollIntoView({ behavior: 'smooth' });
+    }, 1500);
   } catch (error) {
     console.error('Error in adauga():', error);
     showMessage('errorMsg', '❌ Eroare la salvare: ' + (error.message || error), 'error');
@@ -1052,10 +1134,8 @@ function sortTable(columnIndex) {
   var tbody = table.tBodies[0];
   var rows = Array.prototype.slice.call(tbody.rows);
   
-  // Skip if no data
   if (rows.length === 0 || rows[0].cells.length === 1) return;
   
-  // Determine sort direction
   var ascending = sortState.column === columnIndex ? !sortState.ascending : true;
   sortState = { column: columnIndex, ascending: ascending };
   
@@ -1063,7 +1143,6 @@ function sortTable(columnIndex) {
     var aVal = a.cells[columnIndex].innerText.toLowerCase();
     var bVal = b.cells[columnIndex].innerText.toLowerCase();
     
-    // Handle numbers
     var aNum = parseFloat(aVal.replace(/[^\d.-]/g, ''));
     var bNum = parseFloat(bVal.replace(/[^\d.-]/g, ''));
     
@@ -1071,7 +1150,6 @@ function sortTable(columnIndex) {
       return ascending ? aNum - bNum : bNum - aNum;
     }
     
-    // String comparison
     return ascending ? aVal.localeCompare(bVal, 'ro') : bVal.localeCompare(aVal, 'ro');
   });
   
@@ -1079,7 +1157,6 @@ function sortTable(columnIndex) {
     tbody.appendChild(rows[i]);
   }
   
-  // Update visual indicator
   var ths = table.querySelectorAll('th');
   for (var i = 0; i < ths.length; i++) {
     var arrow = i === columnIndex ? (ascending ? ' ↑' : ' ↓') : ' ↕';
@@ -1132,31 +1209,36 @@ function resetFiltre() {
 function navigateTo(pageId) {
   console.log('Navigating to:', pageId);
   
-  // Hide all pages
   var pages = document.querySelectorAll('.page');
   for (var i = 0; i < pages.length; i++) {
     pages[i].classList.remove('active');
   }
   
-  // Show selected page
   var selectedPage = document.getElementById(pageId);
   if (selectedPage) {
     selectedPage.classList.add('active');
+  } else {
+    console.error('Page not found:', pageId);
   }
   
-  // Update nav buttons
   var buttons = document.querySelectorAll('.nav-btn');
   for (var i = 0; i < buttons.length; i++) {
     buttons[i].classList.remove('active');
     var btnText = buttons[i].textContent.toLowerCase().trim();
-    if ((pageId === 'registru' && btnText === 'registru') ||
-        (pageId === 'despre' && btnText === 'despre') ||
-        (pageId === 'contact' && btnText === 'contact')) {
+    
+    if (pageId === 'inregistrare' && btnText.indexOf('înregistrez') !== -1) {
+      buttons[i].classList.add('active');
+    } else if (pageId === 'cautare' && btnText.indexOf('caut') !== -1) {
+      buttons[i].classList.add('active');
+    } else if (pageId === 'despre' && btnText === 'despre') {
+      buttons[i].classList.add('active');
+    } else if (pageId === 'multumiri' && btnText === 'mulțumiri') {
+      buttons[i].classList.add('active');
+    } else if (pageId === 'contact' && btnText === 'contact') {
       buttons[i].classList.add('active');
     }
   }
   
-  // Scroll to top
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
@@ -1168,7 +1250,6 @@ function trimiteWhatsApp() {
   var subiect = document.getElementById('contactSubiect').value;
   var mesaj = document.getElementById('contactMesaj').value.trim();
   
-  // Validation
   if (!nume) {
     alert('❌ Te rugăm să introduci numele tău!');
     document.getElementById('contactNume').focus();
@@ -1187,24 +1268,19 @@ function trimiteWhatsApp() {
     return;
   }
   
-  // Create WhatsApp message
-  var whatsappText = 'Salut! Legat de Registrul Psiho-Oncologi.\n\n';
+  var whatsappText = 'Salut! Am o intrebare despre Registrul Psihologi Oncologi.\n\n';
   whatsappText += 'Nume: ' + nume + '\n';
   whatsappText += 'Subiect: ' + subiect + '\n\n';
   whatsappText += 'Mesaj:\n' + mesaj;
   
-  // WhatsApp URL
   var whatsappURL = 'https://wa.me/40749255366?text=' + encodeURIComponent(whatsappText);
   
-  // Open WhatsApp
   window.open(whatsappURL, '_blank');
   
-  // Clear form
   document.getElementById('contactNume').value = '';
   document.getElementById('contactSubiect').value = '';
   document.getElementById('contactMesaj').value = '';
   
-  // Success message
   setTimeout(function() {
     alert('✅ WhatsApp a fost deschis! Apasă "Send" pentru a trimite mesajul.');
   }, 500);
@@ -1215,7 +1291,6 @@ function trimiteWhatsApp() {
 // ============================================
 loadFromSupabase();
 
-// Add sample data if empty (only for testing)
 setTimeout(function() {
   if (psihologi.length === 0 && !useSupabase) {
     var sampleData = [
