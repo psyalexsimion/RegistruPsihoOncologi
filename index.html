@@ -587,6 +587,16 @@ footer a:hover {
 </div>
 
 <div class="field">
+<label class="required">COPSI</label>
+<select id="copsi">
+<option value="">Selectează</option>
+<option>Inregistrat</option>
+<option>InFormare</option>
+</select>
+<div class="tooltip">Status-ul înregistrării în Colegiul Psihologilor din Romania - Specializați în Intervenții Psiho-oncologice.</div>
+</div>
+
+<div class="field">
 <label class="required">Contactul din RUP (acesta va fi verificat)</label>
 <input id="contactInfo" placeholder="Telefon / Email">
 <div class="tooltip">Important! Trimiteti email/mesaj pe WhatsApp (folosind pagina Contact) de pe contactul din RUP pentru validare si consimtamant</div>
@@ -705,7 +715,8 @@ footer a:hover {
 <th onclick="sortTable(8)">Limba</th>
 <th onclick="sortTable(9)">Experiență</th>
 <th onclick="sortTable(10)">Cod RUP</th>
-<th onclick="sortTable(11)">Contact</th>
+<th onclick="sortTable(11)">COPSI</th>
+<th onclick="sortTable(12)">Contact</th>
 </tr>
 </thead>
 <tbody></tbody>
@@ -781,7 +792,7 @@ footer a:hover {
 <ul class="thanks-list">
 <li>
 <strong>Alex Simion</strong>
-Psiholog, ITst, inițiator și coordonator al proiectului Registru Psiho-Oncologi România
+<a href="https://www.psyalexsimion.com">Psiholog</a>, <a href="https://www.linkedin.com/in/simionalexandrumihail/">ITst</a>, inițiator și coordonator al proiectului Registru Psiho-Oncologi România
 </li>
 </ul>
 
@@ -985,6 +996,7 @@ function valideaza(psiholog) {
   if (!psiholog.exp) errors.push("Experiență este obligatorie");
   if (!psiholog.rup.trim()) errors.push("Cod RUP este obligatoriu");
   if (psiholog.rup.trim().length !== 5) errors.push("Cod RUP trebuie să aibă exact 5 caractere");
+  if (!psiholog.copsi) errors.push("COPSI este obligatoriu");
   if (!psiholog.contact.trim()) errors.push("Contact este obligatoriu");
   
   return errors;
@@ -1035,6 +1047,7 @@ async function adauga() {
     limba: document.getElementById("limba").value.trim(),
     exp: document.getElementById("exp").value,
     rup: rup,
+    copsi: document.getElementById("copsi").value,
     contact: document.getElementById("contactInfo").value.trim()
   };
   
@@ -1093,7 +1106,7 @@ function render(filteredData) {
   document.getElementById('count').textContent = data.length;
   
   if (data.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="12" style="text-align:center; padding:40px; color: var(--text-light);">Nu există psihologi în registru sau nu există rezultate pentru filtrele aplicate.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="13" style="text-align:center; padding:40px; color: var(--text-light);">Nu există psihologi în registru sau nu există rezultate pentru filtrele aplicate.</td></tr>';
     return;
   }
   
@@ -1112,6 +1125,7 @@ function render(filteredData) {
       '<td>' + p.limba + '</td>' +
       '<td>' + p.exp + ' ani</td>' +
       '<td><code style="background:#f0f4f5; padding:2px 6px; border-radius:4px;">' + p.rup + '</code></td>' +
+      '<td><span style="color:' + (p.copsi === 'Inregistrat' ? '#38a169' : '#d69e2e') + '; font-weight:600;">' + (p.copsi || 'InFormare') + '</span></td>' +
       '<td>' + p.contact + '</td>';
     tbody.appendChild(row);
   }
@@ -1172,12 +1186,32 @@ function aplicaFiltre() {
     
     filtered = filtered.filter(function(p) {
       switch(idx) {
-        case 0: return p.format.toLowerCase().indexOf(value) !== -1;
-        case 1: return p.cancer.toLowerCase().indexOf(value) !== -1;
-        case 2: return p.apartinatori.toLowerCase().indexOf(value) !== -1;
-        case 3: return p.unde.toLowerCase().indexOf(value) !== -1;
-        case 4: return p.oras.toLowerCase().indexOf(value) !== -1;
-        case 5: return p.nume.toLowerCase().indexOf(value) !== -1;
+        // Format ședințe - LOGICĂ SPECIALĂ pentru Hibrid
+        case 0: 
+          var psihoFormat = p.format.toLowerCase();
+          
+          // Dacă psihologul are "Hibrid" → apare la ORICE filtru
+          if (psihoFormat === 'hibrid') {
+            return true;  // Hibrid apare la Fizic, Online și Hibrid
+          }
+          
+          // Dacă user selectează "Hibrid" → arată TOT
+          if (value === 'hibrid') {
+            return true;  // Fizic, Online, Hibrid - toate apar
+          }
+          
+          // Altfel, match exact
+          return psihoFormat === value;
+        
+        // Celelalte dropdown filters - EXACT MATCH
+        case 1: return p.cancer.toLowerCase() === value;  // Tip cancer
+        case 2: return p.apartinatori.toLowerCase() === value;  // Aparținători
+        case 3: return p.unde.toLowerCase() === value;  // Unde activează
+        
+        // Text search filters - PARTIAL MATCH
+        case 4: return p.oras.toLowerCase().indexOf(value) !== -1;  // Oraș
+        case 5: return p.nume.toLowerCase().indexOf(value) !== -1;  // Nume
+        
         default: return true;
       }
     });
@@ -1259,7 +1293,7 @@ function trimiteWhatsApp() {
     return;
   }
   
-  var whatsappText = 'Salut! Am o intrebare despre Registrul Psihologi Oncologi.\n\n';
+  var whatsappText = 'Salut! Am o intrebare despre Registrul Psiho-Oncologi.\n\n';
   whatsappText += 'Nume: ' + nume + '\n';
   whatsappText += 'Subiect: ' + subiect + '\n\n';
   whatsappText += 'Mesaj:\n' + mesaj;
@@ -1297,6 +1331,7 @@ setTimeout(function() {
         limba: "Română, Engleză",
         exp: "12",
         rup: "EM123",
+        copsi: "Inregistrat",
         contact: "0721234567"
       },
       {
@@ -1311,6 +1346,7 @@ setTimeout(function() {
         limba: "Română",
         exp: "8",
         rup: "AP456",
+        copsi: "InFormare",
         contact: "andrei.pop@email.com"
       },
       {
@@ -1325,6 +1361,7 @@ setTimeout(function() {
         limba: "Română, Franceză",
         exp: "15",
         rup: "MI789",
+        copsi: "Inregistrat",
         contact: "0745678901"
       }
     ];
