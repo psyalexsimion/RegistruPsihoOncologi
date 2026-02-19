@@ -712,7 +712,7 @@ footer a:hover {
 <th onclick="sortTable(4)">Unde activează</th>
 <th onclick="sortTable(5)">Spital</th>
 <th onclick="sortTable(6)">Oraș</th>
-<th onclick="sortTable(7)">Tarif</th>
+<th onclick="sortTable(7)">Tarif (Lei)</th>
 <th onclick="sortTable(8)">Limba</th>
 <th onclick="sortTable(9)">Experiență generală</th>
 <th onclick="sortTable(10)">Cod RUP</th>
@@ -1135,7 +1135,7 @@ function render(filteredData) {
       '<td>' + p.unde + '</td>' +
       '<td>' + p.spital + '</td>' +
       '<td>' + p.oras + '</td>' +
-      '<td>' + (p.tarif ? p.tarif + ' Lei' : '-') + '</td>' +
+      '<td>' + (p.tarif ? p.tarif : '-') + '</td>' +
       '<td>' + p.limba + '</td>' +
       '<td>' + p.exp + ' ani</td>' +
       '<td><code style="background:#f0f4f5; padding:2px 6px; border-radius:4px;">' + p.rup + '</code></td>' +
