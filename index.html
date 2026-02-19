@@ -576,7 +576,7 @@ footer a:hover {
 </div>
 
 <div class="field">
-<label class="required">Experiență (ani)</label>
+<label class="required">Experiență generală (ani)</label>
 <input type="number" id="exp" placeholder="Ex: 8">
 </div>
 
@@ -587,13 +587,14 @@ footer a:hover {
 </div>
 
 <div class="field">
-<label class="required">COPSI</label>
+<label class="required">Formare Psiho-Oncologie</label>
 <select id="copsi">
 <option value="">Selectează</option>
-<option>Inregistrat</option>
+<option>Da</option>
+<option>Nu</option>
 <option>InFormare</option>
 </select>
-<div class="tooltip">Status-ul înregistrării în Colegiul Psihologilor din Romania - Specializați în Intervenții Psiho-oncologice.</div>
+<div class="tooltip">A urmat cursuri de specializare în psiho-oncologie.</div>
 </div>
 
 <div class="field">
@@ -707,15 +708,15 @@ footer a:hover {
 <th onclick="sortTable(0)">Nume</th>
 <th onclick="sortTable(1)">Format ședințe</th>
 <th onclick="sortTable(2)">Tip cancer</th>
-<th onclick="sortTable(3)">Aparținători</th>
+<th onclick="sortTable(3)">Lucrează cu aparținători?</th>
 <th onclick="sortTable(4)">Unde activează</th>
 <th onclick="sortTable(5)">Spital</th>
 <th onclick="sortTable(6)">Oraș</th>
 <th onclick="sortTable(7)">Tarif</th>
 <th onclick="sortTable(8)">Limba</th>
-<th onclick="sortTable(9)">Experiență</th>
+<th onclick="sortTable(9)">Experiență generală</th>
 <th onclick="sortTable(10)">Cod RUP</th>
-<th onclick="sortTable(11)">COPSI</th>
+<th onclick="sortTable(11)">Formare Psiho-Oncologie</th>
 <th onclick="sortTable(12)">Contact</th>
 </tr>
 </thead>
@@ -1006,10 +1007,10 @@ function valideaza(psiholog) {
   if (!psiholog.spital.trim()) errors.push("Spital este obligatoriu");
   if (!psiholog.oras.trim()) errors.push("Oraș este obligatoriu");
   if (!psiholog.limba.trim()) errors.push("Limba este obligatorie");
-  if (!psiholog.exp) errors.push("Experiență este obligatorie");
+  if (!psiholog.exp) errors.push("Experiență generală este obligatorie");
   if (!psiholog.rup.trim()) errors.push("Cod RUP este obligatoriu");
   if (psiholog.rup.trim().length !== 5) errors.push("Cod RUP trebuie să aibă exact 5 caractere");
-  if (!psiholog.copsi) errors.push("COPSI este obligatoriu");
+  if (!psiholog.copsi) errors.push("Formare Psiho-Oncologie este obligatoriu");
   if (!psiholog.contact.trim()) errors.push("Contact este obligatoriu");
   
   return errors;
